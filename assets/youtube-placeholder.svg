@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><rect width="1280" height="720" fill="#10100f"/><circle cx="640" cy="360" r="112" fill="#201b10" stroke="#c9a45a" stroke-opacity=".45" stroke-width="3"/><path d="M600 286v148l126-74z" fill="#c9a45a"/><text x="640" y="570" text-anchor="middle" fill="#c9a45a" font-family="Arial,sans-serif" font-size="30" letter-spacing="10">TEEMCHASE</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17140f"/>
+      <stop offset=".55" stop-color="#0b0b0a"/>
+      <stop offset="1" stop-color="#17120a"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#c9a45a" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#c9a45a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#glow)"/>
+  <path d="M-80 570 Q330 220 650 480 T1360 250" fill="none" stroke="#c9a45a" stroke-opacity=".12" stroke-width="2"/>
+  <path d="M-60 625 Q350 300 660 540 T1340 330" fill="none" stroke="#c9a45a" stroke-opacity=".07" stroke-width="2"/>
+  <g fill="#f3dfad" font-family="Arial,sans-serif" text-anchor="middle">
+    <text x="640" y="350" font-size="58" font-weight="700" letter-spacing="18">TEEMCHASE</text>
+    <rect x="540" y="383" width="200" height="2" fill="#c9a45a" opacity=".7"/>
+    <text x="640" y="425" font-size="20" letter-spacing="9" opacity=".7">LATEST VIDEO</text>
+  </g>
+</svg>
