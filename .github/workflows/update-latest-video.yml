@@ -61,7 +61,7 @@ jobs:
               "channelUrl": "https://www.youtube.com/@teemchase"
           }
           Path("data").mkdir(exist_ok=True)
-          Path("data/latest-video.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          Path("data/latest-video.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print(f"Updated latest video: {title} ({video_id})")
           PY
 
