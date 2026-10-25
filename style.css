@@ -51,3 +51,10 @@ footer{border-top-color:rgba(201,164,90,.12);padding-top:22px}
 .social-row svg{color:var(--gold2)}
 .social-row a{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.social-row a{transform:none}}
+
+
+/* Use the official GREEN single artwork in the release card */
+.release-art{position:relative;aspect-ratio:1.12;background:#fff;isolation:isolate}
+.release-art:before,.release-art:after{display:none}
+.release-art .art-glow,.release-art .art-copy,.release-art .art-spark{display:none}
+.release-cover{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:#fff}
