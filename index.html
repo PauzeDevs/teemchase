@@ -28,4 +28,16 @@
   const image = document.getElementById("teemchase-portrait");
   if (image) image.src = "assets/IMG_d950a7dc-f48e-4e62-9afd-455d995df6e5.jpg";
 })();
-</script><script src="reveal.js" defer></script></body></html>
+</script><script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.querySelector(".youtube-toggle");
+  const options = document.getElementById("youtube-options");
+  if (!toggle || !options) return;
+  toggle.addEventListener("click", () => {
+    const expanded = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!expanded));
+    options.hidden = expanded;
+  });
+});
+</script>
+<script src="reveal.js" defer></script></body></html>
