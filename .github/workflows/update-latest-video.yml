@@ -1,6 +1,9 @@
 name: Update latest YouTube video
 
 on:
+  push:
+    paths:
+      - ".github/workflows/update-latest-video.yml"
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
