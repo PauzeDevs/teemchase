@@ -40,10 +40,10 @@
     const thumbnail = document.getElementById("latest-video-thumbnail");
     const title = document.getElementById("latest-video-title");
     const date = document.getElementById("latest-video-date");
-    if (link) link.href = video.url || ("https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId));
+    if (link) link.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId);
     if (thumbnail) { thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg"); thumbnail.hidden = false; }
     if (title) title.textContent = video.title;
-    if (date) date.textContent = "Latest upload · Watch now";
+    if (date) date.textContent = video.publishedAt ? new Date(video.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "Latest upload · Watch now";
   } catch (error) {
     console.warn("Could not load latest YouTube upload:", error);
   }
