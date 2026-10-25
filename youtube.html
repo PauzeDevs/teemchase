@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909"><meta name="description" content="Watch the latest videos from TeemChase and visit the official YouTube channel.">
+<title>TEEMCHASE — YouTube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grain"></div>
+<header class="topbar"><a class="wordmark" href="index.html">TEEM<span>CHASE</span></a><a class="nav-link" href="index.html">← BACK HOME</a></header>
+<main class="home">
+<div class="eyebrow"><i></i> THE YOUTUBE WORLD OF TEEMCHASE</div>
+<section class="hero">
+<p class="kicker" style="margin-top:48px">VIDEOS & STORIES</p>
+<h1>PRESS <span>PLAY.</span></h1>
+<p class="intro">The latest upload, right here.<br><span>Catch the newest video or explore the channel.</span></p>
+<article class="youtube-feature-card">
+<a id="latest-video-link" class="youtube-feature-link" href="https://www.youtube.com/@teemchase/videos" target="_blank" rel="noopener">
+<div class="youtube-feature-thumbnail"><img id="latest-video-thumbnail" src="https://img.youtube.com/vi/-S4DPQQhYMU/hqdefault.jpg" alt="Latest TeemChase video thumbnail" loading="lazy"><span class="youtube-play-mark" aria-hidden="true">▶</span></div>
+<div class="youtube-feature-meta"><span class="release-label">LATEST VIDEO</span><h2 id="latest-video-title">Latest video</h2><p id="latest-video-date">Watch the newest upload</p><span class="youtube-feature-cta">WATCH VIDEO ↗</span></div>
+</a>
+</article>
+<div class="links">
+<a class="link-card featured" href="https://www.youtube.com/@teemchase" target="_blank" rel="noopener"><span class="link-icon"><img src="https://cdn.simpleicons.org/youtube/FF0033" alt="" aria-hidden="true" loading="lazy"></span><span><b>Visit Channel</b><small>Browse all videos and Shorts</small></span><span class="arrow">Open Channel ↗</span></a>
+</div>
+<div class="social-row"><a href="https://www.instagram.com/teemchase/" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/E4405F" alt="" aria-hidden="true" loading="lazy"></a><a href="https://www.youtube.com/@teemchase" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/FF0033" alt="" aria-hidden="true" loading="lazy"></a><a href="music.html" aria-label="Music">♫</a></div>
+</section>
+<footer><span>© 2026 TEEMCHASE. All rights reserved.</span><span>BUILT FOR THE NEXT CHAPTER <b>✦</b></span></footer>
+</main>
+<script>
+(async () => {
+  try {
+    const response = await fetch("data/latest-video.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Latest video metadata unavailable");
+    const video = await response.json();
+    if (!video.videoId || !video.title) return;
+    const link = document.getElementById("latest-video-link");
+    const thumbnail = document.getElementById("latest-video-thumbnail");
+    const title = document.getElementById("latest-video-title");
+    const date = document.getElementById("latest-video-date");
+    if (link) link.href = video.url || ("https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId));
+    if (thumbnail) thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg");
+    if (title) title.textContent = video.title;
+    if (date) date.textContent = "Latest upload · Watch now";
+  } catch (error) {
+    console.warn("Could not load latest YouTube upload:", error);
+  }
+})();
+</script><script src="reveal.js" defer></script>
+</body>
+</html>
