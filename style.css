@@ -92,3 +92,15 @@ footer{border-top-color:rgba(201,164,90,.12);padding-top:22px}
 .youtube-feature-meta p{font-size:12px;color:#a29b8c;margin:0}
 .youtube-feature-cta{display:inline-block;margin-top:17px;color:#e1c17a;font-size:11px;letter-spacing:.12em}
 .youtube-feature-link:hover .youtube-feature-cta{color:#f3dfad}
+
+/* YouTube page link reset: prevent browser-default blue underlined anchors. */
+.youtube-feature-card a,
+.youtube-feature-card a:link,
+.youtube-feature-card a:visited,
+.youtube-feature-card a:hover,
+.youtube-feature-card a:active{color:#f8f5ee;text-decoration:none}
+.youtube-feature-card .youtube-feature-cta{color:#e1c17a;text-decoration:none}
+.youtube-feature-card .youtube-feature-meta h2{color:#f8f5ee;text-decoration:none}
+.youtube-feature-card .youtube-feature-meta p{color:#a29b8c;text-decoration:none}
+.youtube-feature-card .youtube-feature-link{color:#f8f5ee!important;text-decoration:none!important}
+.youtube-feature-card .youtube-feature-link *{text-decoration:none!important}
