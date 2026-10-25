@@ -8,9 +8,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: latest-youtube-video
+  cancel-in-progress: true
+
 jobs:
   update-latest-video:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -18,22 +23,27 @@ jobs:
       - name: Fetch latest upload metadata
         run: |
           python -m pip install --upgrade yt-dlp
-          yt-dlp --flat-playlist --playlist-end 1 --print "%(id)s\t%(title)s\t%(upload_date)s" "https://www.youtube.com/@teemchase/videos" > latest-video.tsv
+          yt-dlp --skip-download --playlist-items 1 --no-warnings --print "%(id)s\t%(title)s\t%(upload_date)s" "https://www.youtube.com/@teemchase/videos" > latest-video.tsv
           python - <<'PY'
           import json
+          import re
           from pathlib import Path
 
           line = Path("latest-video.tsv").read_text(encoding="utf-8").strip()
           parts = line.split("\t", 2)
-          if len(parts) < 2 or not parts[0] or not parts[1]:
-              raise SystemExit(f"Could not parse latest upload metadata: {line!r}")
+          if len(parts) < 2:
+              raise SystemExit(f"Unexpected yt-dlp output: {line!r}")
 
-          video_id, title = parts[0], parts[1]
-          upload_date = parts[2] if len(parts) > 2 else ""
-          published_at = (
-              f"{upload_date[:4]}-{upload_date[4:6]}-{upload_date[6:8]}T00:00:00Z"
-              if len(upload_date) == 8 else ""
-          )
+          video_id, title = parts[0].strip(), parts[1].strip()
+          upload_date = parts[2].strip() if len(parts) > 2 else ""
+          if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
+              raise SystemExit(f"Invalid YouTube video ID: {video_id!r}")
+          if not title:
+              raise SystemExit("Latest upload title is empty.")
+
+          published_at = ""
+          if re.fullmatch(r"\d{8}", upload_date):
+              published_at = f"{upload_date[:4]}-{upload_date[4:6]}-{upload_date[6:8]}T00:00:00Z"
 
           data = {
               "videoId": video_id,
