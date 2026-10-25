@@ -17,7 +17,7 @@
 <h1>PRESS <span>PLAY.</span></h1>
 <p class="intro">The latest upload, right here.<br><span>Catch the newest video or explore the channel.</span></p>
 <article class="youtube-feature-card">
-<a id="latest-video-link" class="youtube-feature-link" href="https://www.youtube.com/@teemchase/videos" target="_blank" rel="noopener">
+<a id="latest-video-link" class="youtube-feature-link" href="#" aria-disabled="true">
 <div class="youtube-feature-thumbnail"><img id="latest-video-thumbnail" src="assets/youtube-placeholder.svg" alt="Latest TeemChase video thumbnail" loading="lazy"><span class="youtube-play-mark" aria-hidden="true">▶</span></div>
 <div class="youtube-feature-meta"><span class="release-label">LATEST VIDEO</span><h2 id="latest-video-title">Latest video</h2><p id="latest-video-date">Watch the newest upload</p><span class="youtube-feature-cta">WATCH VIDEO ↗</span></div>
 </a>
@@ -31,20 +31,28 @@
 </main>
 <script>
 (async () => {
+  const link = document.getElementById("latest-video-link");
+  const thumbnail = document.getElementById("latest-video-thumbnail");
+  const title = document.getElementById("latest-video-title");
+  const date = document.getElementById("latest-video-date");
   try {
     const response = await fetch("data/latest-video.json", { cache: "no-store" });
     if (!response.ok) throw new Error("Latest video metadata unavailable");
     const video = await response.json();
-    if (!video.videoId || !video.title) return;
-    const link = document.getElementById("latest-video-link");
-    const thumbnail = document.getElementById("latest-video-thumbnail");
-    const title = document.getElementById("latest-video-title");
-    const date = document.getElementById("latest-video-date");
-    if (link) link.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId);
-    if (thumbnail) { thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg"); thumbnail.hidden = false; }
-    if (title) title.textContent = video.title;
-    if (date) date.textContent = video.publishedAt ? new Date(video.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "Latest upload · Watch now";
+    if (!/^[A-Za-z0-9_-]{11}$/.test(video.videoId || "") || !video.title) {
+      throw new Error("Latest video metadata has not been populated yet");
+    }
+    link.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId);
+    link.removeAttribute("aria-disabled");
+    thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg");
+    title.textContent = video.title;
+    date.textContent = video.publishedAt
+      ? new Date(video.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+      : "Latest upload · Watch now";
   } catch (error) {
+    title.textContent = "Latest video is updating";
+    date.textContent = "Check back shortly, or visit the channel below.";
+    link.addEventListener("click", event => event.preventDefault());
     console.warn("Could not load latest YouTube upload:", error);
   }
 })();
