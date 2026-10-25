@@ -11,7 +11,7 @@
 <main class="home">
 <div class="eyebrow"><i></i> CREATOR&nbsp; / &nbsp;MUSIC&nbsp; / &nbsp;REAL LIFE</div>
 <section class="hero">
-<div class="portrait-wrap"><div class="portrait-ring"></div><img class="portrait" src="https://unavatar.io/instagram/teemchase" alt="TeemChase profile portrait" onerror="this.style.display='none'"><span class="portrait-star">✦</span></div>
+<div class="portrait-wrap"><div class="portrait-ring"></div><img id="teemchase-portrait" class="portrait" alt="TeemChase profile portrait" loading="eager"><span class="portrait-star">✦</span></div>
 <p class="kicker">THE WORLD OF</p><h1>TEEM<span>CHASE</span></h1>
 <p class="intro">Made money. Now I make music.<br><span>Welcome to my world.</span></p>
 <div class="links">
@@ -23,4 +23,4 @@
 </div>
 <div class="social-row"><a href="https://www.instagram.com/teemchase/" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/E4405F" alt="" aria-hidden="true" loading="lazy"></a><a href="https://www.youtube.com/@teemchase" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/FF0033" alt="" aria-hidden="true" loading="lazy"></a><a href="music.html" aria-label="Music"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="currentColor"/><circle cx="18" cy="16" r="3" fill="currentColor"/></svg></a></div>
 </section><footer><span>© TEEMCHASE</span><span>BUILT FOR THE NEXT CHAPTER <b>✦</b></span></footer></main>
-<script src="reveal.js" defer></script></body></html>
+<script src="portrait.js" defer></script><script defer>document.addEventListener("DOMContentLoaded",()=>{const p=document.getElementById("teemchase-portrait");if(p&&typeof teemChasePortrait!=="undefined")p.src=teemChasePortrait;});</script><script src="reveal.js" defer></script></body></html>
