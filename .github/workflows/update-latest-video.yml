@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: latest-youtube-video
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   update-latest-video:
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Fetch latest upload metadata
         run: |
@@ -29,6 +31,7 @@ jobs:
           yt-dlp --skip-download --flat-playlist --playlist-items 1 --no-warnings --dump-single-json "https://www.youtube.com/@teemchase/videos" > latest-video.raw.json
           python - <<'PY'
           import json
+          import os
           import re
           from pathlib import Path
 
@@ -43,7 +46,6 @@ jobs:
           video_id = str(video.get("id") or "").strip()
           title = str(video.get("title") or "").strip()
           upload_date = str(video.get("upload_date") or "").strip()
-
           if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video_id):
               raise SystemExit(f"Invalid YouTube video ID: {video_id!r}")
           if not title:
@@ -62,22 +64,37 @@ jobs:
               "channelUrl": "https://www.youtube.com/@teemchase"
           }
           Path("data").mkdir(exist_ok=True)
-          Path("data/latest-video.json").write_text(
-              json.dumps(metadata, ensure_ascii=False, indent=2) + "\n",
-              encoding="utf-8"
-          )
-          print(f"Latest upload: {title} ({video_id})")
+          output = json.dumps(metadata, ensure_ascii=False, indent=2) + "\n"
+          Path("data/latest-video.json").write_text(output, encoding="utf-8")
+          Path(os.environ["RUNNER_TEMP"], "latest-video.json").write_text(output, encoding="utf-8")
+          print(f"Fetched latest upload: {title} ({video_id})")
           PY
           rm latest-video.raw.json
 
-      - name: Commit latest video metadata
+      - name: Commit latest video metadata with retry
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest-video.json
-          if git diff --cached --quiet; then
-            echo "Latest video metadata is already current."
-          else
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/latest-video.json" data/latest-video.json
+            git add data/latest-video.json
+
+            if git diff --cached --quiet; then
+              echo "Latest video metadata is already current."
+              exit 0
+            fi
+
             git commit -m "(chore): update latest YouTube video"
-            git push
-          fi
+            if git push origin HEAD:main; then
+              echo "Latest video metadata was published to main."
+              exit 0
+            fi
+
+            echo "Push attempt $attempt failed because main changed; retrying."
+          done
+
+          echo "Could not publish latest video metadata after 3 attempts."
+          exit 1
