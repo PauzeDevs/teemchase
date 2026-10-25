@@ -1,7 +1,7 @@
 (() => {
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const targets = document.querySelectorAll(
-    '.topbar, main > .eyebrow, .hero > .portrait-wrap, .hero > .kicker, .hero > h1, .hero > .intro, .release-card, .links .link-card, .social-row, footer'
+    '.topbar, main > .eyebrow, .hero > .portrait-wrap, .hero > .kicker, .hero > h1, .hero > .intro, .release-card, .youtube-feature-card, .links .link-card, .social-row, footer'
   );
   if (motionQuery.matches || !('IntersectionObserver' in window)) return;
 
