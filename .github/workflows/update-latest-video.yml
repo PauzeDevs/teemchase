@@ -1,0 +1,78 @@
+name: Update latest YouTube video
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-latest-video:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Fetch latest video from YouTube RSS
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import urllib.request
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          headers = {"User-Agent": "Mozilla/5.0 (compatible; TeemChaseLatestVideo/1.0)"}
+          request = urllib.request.Request("https://www.youtube.com/@teemchase", headers=headers)
+          with urllib.request.urlopen(request, timeout=30) as response:
+              page = response.read().decode("utf-8", "replace")
+
+          match = re.search(r'"channelId":"(UC[^"]+)"', page)
+          if not match:
+              match = re.search(r'"externalId":"(UC[^"]+)"', page)
+          if not match:
+              raise SystemExit("Could not resolve the @teemchase channel ID")
+          channel_id = match.group(1)
+
+          feed_url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
+          request = urllib.request.Request(feed_url, headers=headers)
+          with urllib.request.urlopen(request, timeout=30) as response:
+              feed = response.read()
+          root = ET.fromstring(feed)
+          ns = {"atom": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015"}
+          entry = root.find("atom:entry", ns)
+          if entry is None:
+              raise SystemExit("No videos found in the channel feed")
+
+          video_id = entry.findtext("yt:videoId", namespaces=ns)
+          title = entry.findtext("atom:title", namespaces=ns)
+          published = entry.findtext("atom:published", namespaces=ns)
+          if not video_id or not title:
+              raise SystemExit("Latest video entry is missing its ID or title")
+
+          data = {
+              "videoId": video_id,
+              "title": title,
+              "publishedAt": published,
+              "url": f"https://www.youtube.com/watch?v={video_id}",
+              "thumbnail": f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg",
+              "channelUrl": "https://www.youtube.com/@teemchase"
+          }
+          Path("data").mkdir(exist_ok=True)
+          Path("data/latest-video.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          print(f"Updated latest video: {title} ({video_id})")
+          PY
+
+      - name: Commit latest video metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/latest-video.json
+          if git diff --cached --quiet; then
+            echo "Latest video metadata is already current."
+          else
+            git commit -m "(chore): update latest YouTube video"
+            git push
+          fi
