@@ -18,7 +18,7 @@
 <p class="intro">The latest upload, right here.<br><span>Catch the newest video or explore the channel.</span></p>
 <article class="youtube-feature-card">
 <a id="latest-video-link" class="youtube-feature-link" href="https://www.youtube.com/@teemchase/videos" target="_blank" rel="noopener">
-<div class="youtube-feature-thumbnail"><img id="latest-video-thumbnail" src="https://img.youtube.com/vi/-S4DPQQhYMU/hqdefault.jpg" alt="Latest TeemChase video thumbnail" loading="lazy"><span class="youtube-play-mark" aria-hidden="true">▶</span></div>
+<div class="youtube-feature-thumbnail"><img id="latest-video-thumbnail" src="" alt="Latest TeemChase video thumbnail" loading="lazy"><span class="youtube-play-mark" aria-hidden="true">▶</span></div>
 <div class="youtube-feature-meta"><span class="release-label">LATEST VIDEO</span><h2 id="latest-video-title">Latest video</h2><p id="latest-video-date">Watch the newest upload</p><span class="youtube-feature-cta">WATCH VIDEO ↗</span></div>
 </a>
 </article>
@@ -41,7 +41,7 @@
     const title = document.getElementById("latest-video-title");
     const date = document.getElementById("latest-video-date");
     if (link) link.href = video.url || ("https://www.youtube.com/watch?v=" + encodeURIComponent(video.videoId));
-    if (thumbnail) thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg");
+    if (thumbnail) { thumbnail.src = video.thumbnail || ("https://img.youtube.com/vi/" + encodeURIComponent(video.videoId) + "/hqdefault.jpg"); thumbnail.hidden = false; }
     if (title) title.textContent = video.title;
     if (date) date.textContent = "Latest upload · Watch now";
   } catch (error) {
