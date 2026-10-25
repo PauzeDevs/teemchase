@@ -104,3 +104,8 @@ footer{border-top-color:rgba(201,164,90,.12);padding-top:22px}
 .youtube-feature-card .youtube-feature-meta p{color:#a29b8c;text-decoration:none}
 .youtube-feature-card .youtube-feature-link{color:#f8f5ee!important;text-decoration:none!important}
 .youtube-feature-card .youtube-feature-link *{text-decoration:none!important}
+
+/* Prevent the latest-video card from looking clickable before valid metadata loads. */
+#latest-video-link[aria-disabled="true"]{cursor:default}
+#latest-video-link[aria-disabled="true"] .youtube-play-mark{opacity:.55}
+#latest-video-link[aria-disabled="true"]:hover .youtube-feature-cta{color:#e1c17a}
